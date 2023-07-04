@@ -4,17 +4,16 @@ import africa.breej.africa.breej.payload.Response;
 import africa.breej.africa.breej.payload.auth.AuthResponse;
 import africa.breej.africa.breej.payload.auth.LoginRequest;
 import africa.breej.africa.breej.payload.auth.SignUpRequest;
+import africa.breej.africa.breej.security.CurrentUser;
 import africa.breej.africa.breej.security.TokenProvider;
+import africa.breej.africa.breej.security.UserPrincipal;
 import africa.breej.africa.breej.service.auth.AuthService;
 import africa.breej.africa.breej.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -53,6 +52,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         AuthResponse authResponse = authService.authenticateUser(loginRequest);
+        return ResponseEntity.ok(authResponse);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(@CurrentUser UserPrincipal userPrincipal) {
+        AuthResponse authResponse = authService.logoutUser(userPrincipal.getId());
         return ResponseEntity.ok(authResponse);
     }
 }

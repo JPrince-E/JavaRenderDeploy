@@ -15,4 +15,6 @@ public interface AuthService {
     URI registerUser(SignUpRequest signUpRequest);
 
     Optional<User> findByEmail(String email);
+
+    AuthResponse logoutUser(String id);
 }

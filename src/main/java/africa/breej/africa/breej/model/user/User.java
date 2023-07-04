@@ -1,14 +1,13 @@
 package africa.breej.africa.breej.model.user;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-
 import africa.breej.africa.breej.model.auth.AuthProvider;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,6 +29,10 @@ public class User {
     private Boolean emailVerified = false;
 
     private String password;
+
+    private String phoneNumber;
+
+    private Role role;
 
     @NotNull
     private AuthProvider provider;
@@ -53,7 +56,11 @@ public class User {
 
     private String cgpa;
 
-    private String phoneNumber;
+    private String specialty;
+
+    private String modeOfIdentification;
+
+    private String identificationId;
 
     private boolean deleted=false;
 

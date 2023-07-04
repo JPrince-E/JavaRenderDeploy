@@ -115,6 +115,9 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(updateUserProfileRequest.getEmail());
             }
 
+            if(updateUserProfileRequest.getGender() != null)
+                user.setGender(updateUserProfileRequest.getGender());
+
             if (!StringUtil.isBlank(updateUserProfileRequest.getDepartment()))
                 user.setDepartment(updateUserProfileRequest.getDepartment());
 
@@ -136,8 +139,14 @@ public class UserServiceImpl implements UserService {
             if (!StringUtil.isBlank(updateUserProfileRequest.getCgpa()))
                 user.setCgpa(updateUserProfileRequest.getCgpa());
 
-            if(updateUserProfileRequest.getGender() != null)
-                user.setGender(updateUserProfileRequest.getGender());
+            if (!StringUtil.isBlank(updateUserProfileRequest.getSpecialty()))
+                user.setSpecialty(updateUserProfileRequest.getSpecialty());
+
+            if (!StringUtil.isBlank(updateUserProfileRequest.getModeOfIdentification()))
+                user.setModeOfIdentification(updateUserProfileRequest.getModeOfIdentification());
+
+            if(updateUserProfileRequest.getRole() != null)
+                user.setRole(updateUserProfileRequest.getRole());
 
             user.setTimeUpdated(LocalDateTime.now());
 

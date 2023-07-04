@@ -1,10 +1,11 @@
 package africa.breej.africa.breej.payload.auth;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
+import africa.breej.africa.breej.model.user.Role;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -23,6 +24,9 @@ public class SignUpRequest {
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private Role role;
 
     // Getters and Setters (Omitted for brevity)
 }

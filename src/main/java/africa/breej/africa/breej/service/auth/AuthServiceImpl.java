@@ -1,7 +1,7 @@
 package africa.breej.africa.breej.service.auth;
 
-import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.model.auth.AuthProvider;
+import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.auth.AuthResponse;
 import africa.breej.africa.breej.payload.auth.LoginRequest;
 import africa.breej.africa.breej.payload.auth.SignUpRequest;
@@ -26,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -64,8 +65,15 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
+        user.setRole(signUpRequest.getRole());
+        user.setUsername(signUpRequest.getFirstName());
         user.setProvider(AuthProvider.LOCAL);
         user.setTimeCreated(LocalDateTime.now());
+
+        String randomUsername = generateRandomUsername(signUpRequest);
+
+        // Assign the random username to the user object
+        user.setUsername(randomUsername);
 
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
@@ -76,6 +84,53 @@ public class AuthServiceImpl implements AuthService {
                 .buildAndExpand(result.getId()).toUri();
 
         return location;
+    }
+        public static String generateRandomUsername(SignUpRequest signUpRequest) {
+            Random random = new Random();
+
+            int randomNumber = 10 + random.nextInt(99);
+
+            // Get the first two letters of the first name
+            String firstNamePrefix = signUpRequest.getFirstName().substring(0, 2).toLowerCase();
+
+            // Calculate the maximum subset lengths based on the remaining username length
+            int remainingLength = 5 - firstNamePrefix.length();
+            int maxFirstNameSubsetLength = Math.min(remainingLength / 2, signUpRequest.getFirstName().length() - 2);
+            int maxLastNameSubsetLength = Math.min(remainingLength / 2, signUpRequest.getLastName().length());
+
+            // Get a random number for the first name subset length
+            int firstNameSubsetLength = random.nextInt(maxFirstNameSubsetLength + 1);
+
+            // Get a random number for the last name subset length
+            int lastNameSubsetLength = random.nextInt(maxLastNameSubsetLength + 1);
+
+            // Get a random starting index for the first name subset
+            int firstNameStartIndex = random.nextInt(signUpRequest.getFirstName().length() - firstNameSubsetLength - 1) + 2;
+
+            // Get a random starting index for the last name subset
+            int lastNameStartIndex = random.nextInt(signUpRequest.getLastName().length() - lastNameSubsetLength + 1);
+
+            // Extract the subsets of letters from the first name and last name
+            String firstNameSubset = signUpRequest.getFirstName().substring(firstNameStartIndex, firstNameStartIndex + firstNameSubsetLength);
+            String lastNameSubset = signUpRequest.getLastName().substring(lastNameStartIndex, lastNameStartIndex + lastNameSubsetLength);
+
+            // Combine the subsets with the first name prefix to form the username
+            String username = firstNamePrefix + scatterString(firstNameSubset.toLowerCase() + lastNameSubset.toLowerCase()) + randomNumber;
+
+            return username;
+        }
+
+    public static String scatterString(String input) {
+        StringBuilder scattered = new StringBuilder();
+        Random random = new Random();
+
+        // Scatter the characters randomly
+        for (char c : input.toCharArray()) {
+            scattered.append(c);
+            scattered.insert(random.nextInt(scattered.length()), c);
+        }
+
+        return scattered.toString();
     }
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
@@ -131,5 +186,13 @@ public class AuthServiceImpl implements AuthService {
     private void updateLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public AuthResponse logoutUser(String id) {
+        User user = new User();
+        UserResponse userResponse =  getUserResponseFromUser(user);
+        String token = "";
+        SecurityContextHolder.clearContext();
+        return new AuthResponse(token, userResponse);
     }
 }
