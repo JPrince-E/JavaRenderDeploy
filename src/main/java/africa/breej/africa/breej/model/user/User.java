@@ -62,6 +62,16 @@ public class User {
 
     private String identificationId;
 
+    private String profilePictureId;
+
+    private String profilePictureUrl;
+
+    private String status;
+
+    private String rating;
+
+    private String about;
+
     private boolean deleted=false;
 
     LocalDateTime timeCreated;

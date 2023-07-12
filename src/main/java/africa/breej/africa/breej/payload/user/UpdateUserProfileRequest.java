@@ -46,4 +46,14 @@ public class UpdateUserProfileRequest {
 
     private String identificationId;
 
+    private String profilePictureId;
+
+    private String profilePictureUrl;
+
+    private String status;
+
+    private String rating;
+
+    private String about;
+
 }
