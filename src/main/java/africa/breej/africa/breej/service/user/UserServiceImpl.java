@@ -6,6 +6,7 @@ import africa.breej.africa.breej.exception.NotFoundException;
 import africa.breej.africa.breej.exception.ResourceNotFoundException;
 import africa.breej.africa.breej.model.auth.UserOverview;
 import africa.breej.africa.breej.model.auth.UserReport;
+import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.auth.SignUpRequest;
 import africa.breej.africa.breej.payload.user.UpdateUserPasswordRequest;
@@ -63,6 +64,13 @@ public class UserServiceImpl implements UserService {
 
     public List<User> fetchAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<User> fetchUsersByRole(String userId, Role role) {
+        if (role != Role.ROLE_TUTOR){
+            throw new NotFoundException("Tutor not found");
+        }
+        return userRepository.findAllByRoleAndDeleted(role, false);
     }
 
     @Override

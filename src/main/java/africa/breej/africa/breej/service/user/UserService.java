@@ -1,6 +1,7 @@
 package africa.breej.africa.breej.service.user;
 
 import africa.breej.africa.breej.model.auth.UserOverview;
+import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.auth.SignUpRequest;
 import africa.breej.africa.breej.payload.user.UpdateUserPasswordRequest;
@@ -24,6 +25,8 @@ public interface UserService {
     Optional<User> fetchUserById(String id);
 
     List<User> fetchAllUsers();
+
+    List<User> fetchUsersByRole(String userId, Role role);
 
     User updatePassword(String id, UpdateUserPasswordRequest updateUserPinRequest);
 

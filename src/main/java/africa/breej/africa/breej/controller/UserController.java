@@ -6,6 +6,7 @@ import africa.breej.africa.breej.exception.NotFoundException;
 import africa.breej.africa.breej.model.auth.AuthProvider;
 import africa.breej.africa.breej.model.auth.UserOverview;
 import africa.breej.africa.breej.model.user.Gender;
+import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.Response;
 import africa.breej.africa.breej.payload.user.UpdateUserPasswordRequest;
@@ -47,6 +48,15 @@ public class UserController {
     @GetMapping("/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
        return userService.fetchUserById(userPrincipal.getId()).get();
+    }
+
+    @GetMapping("/tutors/{role}")
+    public ResponseEntity<List<User>> getAllTutors(@CurrentUser UserPrincipal userPrincipal,
+                                                   @PathVariable(value = "role") final Role role,
+                                                   @RequestParam(value = "page", defaultValue = "0") final int page,
+                                                   @RequestParam(value = "limit", defaultValue = "50") final int limit) {
+        List<User> users = userService.fetchUsersByRole(userPrincipal.getId(), role);
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/update-password")
