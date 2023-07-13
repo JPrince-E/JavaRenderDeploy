@@ -153,6 +153,15 @@ public class UserServiceImpl implements UserService {
             if (!StringUtil.isBlank(updateUserProfileRequest.getModeOfIdentification()))
                 user.setModeOfIdentification(updateUserProfileRequest.getModeOfIdentification());
 
+            if (!StringUtil.isBlank(updateUserProfileRequest.getStatus()))
+                user.setStatus(updateUserProfileRequest.getStatus());
+
+            if (!StringUtil.isBlank(updateUserProfileRequest.getRating()))
+                user.setRating(updateUserProfileRequest.getRating());
+
+            if (!StringUtil.isBlank(updateUserProfileRequest.getAbout()))
+                user.setAbout(updateUserProfileRequest.getAbout());
+
             if(updateUserProfileRequest.getRole() != null)
                 user.setRole(updateUserProfileRequest.getRole());
 

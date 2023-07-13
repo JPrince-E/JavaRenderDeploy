@@ -192,6 +192,10 @@ public class UserController {
             filters.put("rating", rating);
         }
 
+        if (!StringUtil.isBlank(about)) {
+            filters.put("about", about);
+        }
+
         if (provider!=null) {
             filters.put("provider", provider.name());
         }
