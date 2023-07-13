@@ -100,13 +100,20 @@ public class UserController {
             @RequestParam(value = "email", required = false) final String email,
             @RequestParam(value = "firstName", required = false) final String firstName,
             @RequestParam(value = "lastName", required = false) final String lastName,
+            @RequestParam(value = "username", required = false) final String username,
             @RequestParam(value = "gender", required = false) final Gender gender,
+            @RequestParam(value = "role", required = false) final Role role,
             @RequestParam(value = "department", required = false) final String department,
             @RequestParam(value = "courseOfStudy", required = false) final String courseOfStudy,
             @RequestParam(value = "faculty", required = false) final String faculty,
             @RequestParam(value = "nameOfSchool", required = false) final String nameOfSchool,
             @RequestParam(value = "yearOfEntry", required = false) final String yearOfEntry,
             @RequestParam(value = "level", required = false) final String level,
+            @RequestParam(value = "cgpa", required = false) final String cgpa,
+            @RequestParam(value = "specialty", required = false) final String specialty,
+            @RequestParam(value = "status", required = false) final String status,
+            @RequestParam(value = "rating", required = false) final String rating,
+            @RequestParam(value = "about", required = false) final String about,
             @RequestParam(value = "provider", required = false) final AuthProvider provider,
             @RequestParam(value = "providerId", required = false) final String providerId,
             @RequestParam(value = "sort", defaultValue = "timeCreated") final List<String> sort,
@@ -133,8 +140,16 @@ public class UserController {
             filters.put("lastName", lastName);
         }
 
+        if (!StringUtil.isBlank(username)) {
+            filters.put("username", username);
+        }
+
         if (gender!=null) {
             filters.put("gender", gender.name());
+        }
+
+        if (role!=null) {
+            filters.put("role", role.name());
         }
 
         if (!StringUtil.isBlank(department)) {
@@ -159,6 +174,22 @@ public class UserController {
 
         if (!StringUtil.isBlank(level)) {
             filters.put("level", level);
+        }
+
+        if (!StringUtil.isBlank(cgpa)) {
+            filters.put("cgpa", cgpa);
+        }
+
+        if (!StringUtil.isBlank(specialty)) {
+            filters.put("specialty", specialty);
+        }
+
+        if (!StringUtil.isBlank(status)) {
+            filters.put("status", status);
+        }
+
+        if (!StringUtil.isBlank(rating)) {
+            filters.put("rating", rating);
         }
 
         if (provider!=null) {
