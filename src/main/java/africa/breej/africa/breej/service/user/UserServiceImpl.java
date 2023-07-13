@@ -156,6 +156,12 @@ public class UserServiceImpl implements UserService {
             if (!StringUtil.isBlank(updateUserProfileRequest.getStatus()))
                 user.setStatus(updateUserProfileRequest.getStatus());
 
+            if(updateUserProfileRequest.getBookingStatus() != null)
+                user.setBookingStatus(updateUserProfileRequest.getBookingStatus());
+
+            if(updateUserProfileRequest.getOnlineStatus() != null)
+                user.setOnlineStatus(updateUserProfileRequest.getOnlineStatus());
+
             if (!StringUtil.isBlank(updateUserProfileRequest.getRating()))
                 user.setRating(updateUserProfileRequest.getRating());
 

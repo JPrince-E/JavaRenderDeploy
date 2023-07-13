@@ -24,6 +24,8 @@ public interface UserService {
 
     Optional<User> fetchUserById(String id);
 
+    Optional<User> fetchUserByPhoneNumber(String phoneNumber);
+
     List<User> fetchAllUsers();
 
     List<User> fetchUsersByRole(String userId, Role role);

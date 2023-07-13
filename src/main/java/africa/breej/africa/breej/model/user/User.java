@@ -1,6 +1,8 @@
 package africa.breej.africa.breej.model.user;
 
 import africa.breej.africa.breej.model.auth.AuthProvider;
+import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.OnlineStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -67,6 +69,10 @@ public class User {
     private String profilePictureUrl;
 
     private String status;
+
+    private OnlineStatus onlineStatus;
+
+    private BookingStatus bookingStatus;
 
     private String rating;
 

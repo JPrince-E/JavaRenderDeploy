@@ -1,6 +1,7 @@
 package africa.breej.africa.breej.payload.booking;
 
 import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.OnlineStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -72,7 +73,7 @@ public class BookingRequest {
 
     private String platform;
 
-    private String onlineStatus;
+    private OnlineStatus onlineStatus;
 
     private BookingStatus bookingStatus;
 }

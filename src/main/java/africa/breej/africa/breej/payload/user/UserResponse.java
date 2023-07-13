@@ -1,5 +1,7 @@
 package africa.breej.africa.breej.payload.user;
 
+import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.OnlineStatus;
 import africa.breej.africa.breej.model.user.Gender;
 import africa.breej.africa.breej.model.user.Role;
 import lombok.AllArgsConstructor;
@@ -58,6 +60,10 @@ public class UserResponse {
     private String profilePictureUrl;
 
     private String status;
+
+    private OnlineStatus onlineStatus;
+
+    private BookingStatus bookingStatus;
 
     private String rating;
 

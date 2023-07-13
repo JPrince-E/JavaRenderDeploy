@@ -4,9 +4,11 @@ import africa.breej.africa.breej.exception.NotAcceptableException;
 import africa.breej.africa.breej.exception.ResourceNotFoundException;
 import africa.breej.africa.breej.model.booking.Booking;
 import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.booking.BookingRequest;
 import africa.breej.africa.breej.repository.BookingRepository;
+import africa.breej.africa.breej.repository.UserRepository;
 import africa.breej.africa.breej.service.user.UserService;
 import africa.breej.africa.breej.service.user.UserServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -24,12 +26,14 @@ public class BookingServiceImpl implements BookingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     UserService userService;
+    UserRepository userRepository;
     BookingRepository bookingRepository;
 
     private final ApplicationEventPublisher publisher;
 
-    public BookingServiceImpl(UserServiceImpl userService, BookingRepository bookingRepository, ApplicationEventPublisher publisher) {
+    public BookingServiceImpl(UserServiceImpl userService, BookingRepository bookingRepository, UserRepository userRepository, ApplicationEventPublisher publisher) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.publisher = publisher;
     }
@@ -39,17 +43,30 @@ public class BookingServiceImpl implements BookingService {
         Optional<User> userOptional = userService.fetchUserById(userId);
         Booking booking = getBookingFromBookingRequest(bookingRequest);
         if (userOptional.isPresent()) {
-            boolean existingBookingStatus = bookingRequest.getBookingStatus() == BookingStatus.UNAVAILABLE;
-            if (existingBookingStatus)
-                throw new NotAcceptableException("Tutor Booked Already!");
-            else {
-                booking.setUserId(userId);
-                booking.setTimeCreated(LocalDateTime.now());
+//            userService.fetchUsersByRole();
+
+            Optional<User> userPhone = userService.fetchUserByPhoneNumber(bookingRequest.getTutorPhone());
+            if (!userPhone.isPresent()) {
+                throw new NotAcceptableException("Tutor does not exist!");
             }
-        } else {
-            throw new ResourceNotFoundException("Booking", "userId", userId);
+            if (userPhone.get().getRole() == Role.ROLE_TUTOR) {
+                boolean existingBookingStatus = userPhone.get().getBookingStatus() == BookingStatus.UNAVAILABLE;
+                if (existingBookingStatus) {
+                    throw new NotAcceptableException("Tutor Booked Already!");
+                } else {
+                    booking.setUserId(userId);
+                    booking.setTimeCreated(LocalDateTime.now());
+                    userPhone.get().setBookingStatus(BookingStatus.UNAVAILABLE);
+
+//                    userService.updateUser(userPhone.get().getId(), bookingRequest.getBookingStatus()));
+                }
+            } else {
+                throw new ResourceNotFoundException("Booking", "userId", userId);
+            }
         }
-        return bookingRepository.save(booking);
+
+            return bookingRepository.save(booking);
+
     }
 
     private Booking getBookingFromBookingRequest(BookingRequest bookingRequest) {

@@ -1,5 +1,7 @@
 package africa.breej.africa.breej.payload.user;
 
+import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.OnlineStatus;
 import africa.breej.africa.breej.model.user.Gender;
 import africa.breej.africa.breej.model.user.Role;
 import lombok.Getter;
@@ -51,6 +53,10 @@ public class UpdateUserProfileRequest {
     private String profilePictureUrl;
 
     private String status;
+
+    private OnlineStatus onlineStatus;
+
+    private BookingStatus bookingStatus;
 
     private String rating;
 
