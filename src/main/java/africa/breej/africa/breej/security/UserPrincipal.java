@@ -1,26 +1,29 @@
 package africa.breej.africa.breej.security;
 
 
-import java.util.Collection;
-import java.util.Map;
-
+import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
     private String id;
     private String email;
     private String phoneNumber;
     private String password;
+    private Role role;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(String id, String email, String phoneNumber, String password /*Collection<? extends GrantedAuthority> authorities*/) {
+    public UserPrincipal(String id, String email, String phoneNumber, String password, Role role /*Collection<? extends GrantedAuthority> authorities*/) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.role = role;
     }
 
     public static UserPrincipal create(User user) {
@@ -29,7 +32,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                user.getPassword()
+                user.getPassword(),
+                user.getRole()
         );
     }
 
@@ -49,6 +53,10 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override

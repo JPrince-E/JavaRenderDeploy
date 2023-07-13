@@ -1,5 +1,6 @@
 package africa.breej.africa.breej.payload.booking;
 
+import africa.breej.africa.breej.model.booking.BookingStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.Email;
 
 @Getter
 @Setter
-public class UpdateBookingRequest {
+public class BookingRequest {
 
     private String courseId;
 
@@ -71,5 +72,7 @@ public class UpdateBookingRequest {
 
     private String platform;
 
-    private String status;
+    private String onlineStatus;
+
+    private BookingStatus bookingStatus;
 }

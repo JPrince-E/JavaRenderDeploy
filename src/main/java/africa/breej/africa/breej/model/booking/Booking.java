@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,6 +14,8 @@ import javax.validation.constraints.Email;
 public class Booking {
     @Id
     private String id;
+
+    private String userId;
 
     private String courseId;
 
@@ -76,6 +79,14 @@ public class Booking {
 
     private String platform;
 
-    private String status;
+    private String onlineStatus;
+
+    private String bookingStatus;
+
+    private boolean deleted=false;
+
+    LocalDateTime timeCreated;
+
+    LocalDateTime timeUpdated;
 
 }
