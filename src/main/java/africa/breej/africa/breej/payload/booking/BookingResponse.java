@@ -1,5 +1,8 @@
 package africa.breej.africa.breej.payload.booking;
 
+import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.OnlineStatus;
+import africa.breej.africa.breej.model.user.Gender;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +18,11 @@ public class BookingResponse {
 
     private String tutorId;
 
-    private String tutorName;
+    private String tutorFirstName;
+
+    private String tutorLastName;
+
+    private String tutorUsername;
 
     private String tutorPhone;
 
@@ -32,12 +39,16 @@ public class BookingResponse {
 
     private String studentLastName;
 
+    private String studentUsername;
+
+    private Gender tutorGender;
+
     @Email
     private String studentEmail;
 
     private String studentPhone;
 
-    private String studentGender;
+    private Gender studentGender;
 
     private String studentPictureId;
 
@@ -74,4 +85,12 @@ public class BookingResponse {
     private String platform;
 
     private String status;
+
+    private boolean pending;
+
+    private boolean approved;
+
+    private OnlineStatus onlineStatus;
+
+    private BookingStatus bookingStatus;
 }

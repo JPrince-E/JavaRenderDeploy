@@ -2,6 +2,6 @@ package africa.breej.africa.breej.model.booking;
 
 public enum BookingStatus {
     AVAILABLE,
-    UNAVAILABLE,
     BOOKED,
+    NOT_AVAILABLE,
 }

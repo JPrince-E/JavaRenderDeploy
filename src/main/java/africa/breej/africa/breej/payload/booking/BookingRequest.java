@@ -2,6 +2,7 @@ package africa.breej.africa.breej.payload.booking;
 
 import africa.breej.africa.breej.model.booking.BookingStatus;
 import africa.breej.africa.breej.model.booking.OnlineStatus;
+import africa.breej.africa.breej.model.user.Gender;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,13 @@ public class BookingRequest {
 
     private String tutorId;
 
-    private String tutorName;
+    private String tutorFirstName;
+
+    private String tutorLastName;
+
+    private String tutorUsername;
+
+    private Gender tutorGender;
 
     private String tutorPhone;
 
@@ -32,12 +39,14 @@ public class BookingRequest {
 
     private String studentLastName;
 
+    private String studentUsername;
+
     @Email
     private String studentEmail;
 
     private String studentPhone;
 
-    private String studentGender;
+    private Gender studentGender;
 
     private String studentPictureId;
 
@@ -72,6 +81,12 @@ public class BookingRequest {
     private String tutorRating;
 
     private String platform;
+
+    private String status;
+
+    private boolean pending = false;
+
+    private boolean approved = false;
 
     private OnlineStatus onlineStatus;
 

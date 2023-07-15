@@ -69,4 +69,6 @@ public class UserResponse {
 
     private String about;
 
+    private String referralCode;
+
 }

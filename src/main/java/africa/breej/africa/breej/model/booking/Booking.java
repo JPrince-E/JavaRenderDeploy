@@ -1,5 +1,6 @@
 package africa.breej.africa.breej.model.booking;
 
+import africa.breej.africa.breej.model.user.Gender;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -21,7 +22,13 @@ public class Booking {
 
     private String tutorId;
 
-    private String tutorName;
+    private String tutorFirstName;
+
+    private String tutorLastName;
+
+    private String tutorUsername;
+
+    private Gender tutorGender;
 
     private String tutorPhone;
 
@@ -38,12 +45,14 @@ public class Booking {
 
     private String studentLastName;
 
+    private String studentUsername;
+
     @Email
     private String studentEmail;
 
     private String studentPhone;
 
-    private String studentGender;
+    private Gender studentGender;
 
     private String studentPictureId;
 
@@ -79,9 +88,15 @@ public class Booking {
 
     private String platform;
 
-    private String onlineStatus;
+    private String status;
 
-    private String bookingStatus;
+    private boolean pending = false;
+
+    private boolean approved = false;
+
+    private OnlineStatus onlineStatus;
+
+    private BookingStatus bookingStatus;
 
     private boolean deleted=false;
 

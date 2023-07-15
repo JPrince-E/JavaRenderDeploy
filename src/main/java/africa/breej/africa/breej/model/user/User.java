@@ -78,6 +78,8 @@ public class User {
 
     private String about;
 
+    private String referralCode;
+
     private boolean deleted=false;
 
     LocalDateTime timeCreated;

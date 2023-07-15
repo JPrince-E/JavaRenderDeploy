@@ -28,5 +28,7 @@ public class SignUpRequest {
     @NotBlank
     private Role role;
 
+    private String referralCode;
+
     // Getters and Setters (Omitted for brevity)
 }
