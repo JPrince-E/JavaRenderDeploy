@@ -8,7 +8,6 @@ import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.booking.BookingRequest;
 import africa.breej.africa.breej.repository.BookingRepository;
-import africa.breej.africa.breej.repository.UserRepository;
 import africa.breej.africa.breej.service.user.UserService;
 import africa.breej.africa.breej.service.user.UserServiceImpl;
 import africa.breej.africa.breej.util.StringUtil;
@@ -27,14 +26,12 @@ public class BookingServiceImpl implements BookingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     UserService userService;
-    UserRepository userRepository;
     BookingRepository bookingRepository;
 
     private final ApplicationEventPublisher publisher;
 
-    public BookingServiceImpl(UserServiceImpl userService, BookingRepository bookingRepository, UserRepository userRepository, ApplicationEventPublisher publisher) {
+    public BookingServiceImpl(UserServiceImpl userService, BookingRepository bookingRepository, ApplicationEventPublisher publisher) {
         this.userService = userService;
-        this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.publisher = publisher;
     }
@@ -54,10 +51,10 @@ public class BookingServiceImpl implements BookingService {
                     throw new NotAcceptableException("Tutor not available for booking!");
                 } else {
                     booking.setUserId(userId);
-                    booking.setTimeCreated(LocalDateTime.now());
                     booking.setPending(true);
                     booking.setBookingStatus(BookingStatus.BOOKED);
                     userPhone.get().setBookingStatus(BookingStatus.BOOKED);
+
                     booking.setTimeCreated(LocalDateTime.now());
                 }
             } else {

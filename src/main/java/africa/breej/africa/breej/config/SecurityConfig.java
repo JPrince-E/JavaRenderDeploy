@@ -30,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/v1/auth/**").permitAll() // Allow access to sign up endpoint without authentication
                 .antMatchers("/api/v1/user/**")
                 .permitAll()
+                .antMatchers("/api/v1/course/**")
+                .permitAll()
                 .antMatchers("/api/v1/booking/**")
                 .permitAll()
                     .anyRequest().authenticated() // Require authentication for all other endpoints
