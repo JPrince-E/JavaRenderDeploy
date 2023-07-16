@@ -4,6 +4,7 @@ import africa.breej.africa.breej.exception.NotAcceptableException;
 import africa.breej.africa.breej.exception.ResourceNotFoundException;
 import africa.breej.africa.breej.model.booking.Booking;
 import africa.breej.africa.breej.model.booking.BookingStatus;
+import africa.breej.africa.breej.model.booking.Course;
 import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.booking.BookingRequest;
@@ -26,12 +27,14 @@ public class BookingServiceImpl implements BookingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     UserService userService;
+    CourseService courseService;
     BookingRepository bookingRepository;
 
     private final ApplicationEventPublisher publisher;
 
-    public BookingServiceImpl(UserServiceImpl userService, BookingRepository bookingRepository, ApplicationEventPublisher publisher) {
+    public BookingServiceImpl(UserServiceImpl userService, CourseService courseService, BookingRepository bookingRepository, ApplicationEventPublisher publisher) {
         this.userService = userService;
+        this.courseService = courseService;
         this.bookingRepository = bookingRepository;
         this.publisher = publisher;
     }
@@ -41,19 +44,58 @@ public class BookingServiceImpl implements BookingService {
         Optional<User> userOptional = userService.fetchUserById(userId);
         Booking booking = getBookingFromBookingRequest(bookingRequest);
         if (userOptional.isPresent()) {
-            Optional<User> userPhone = userService.fetchUserByPhoneNumber(bookingRequest.getTutorId());
-            if (!userPhone.isPresent()) {
+            Optional<User> tutor = userService.fetchUserById(bookingRequest.getTutorId());
+            Optional<Course> course = courseService.fetchCourseById(bookingRequest.getCourseId());
+            if (!tutor.isPresent()) {
                 throw new NotAcceptableException("Tutor does not exist!");
             }
-            if (userPhone.get().getRole() == Role.ROLE_TUTOR) {
-                boolean existingBookingStatus = userPhone.get().getBookingStatus() == BookingStatus.NOT_AVAILABLE;
+            if (tutor.get().getRole() == Role.ROLE_TUTOR) {
+                boolean existingBookingStatus = tutor.get().getBookingStatus() == BookingStatus.NOT_AVAILABLE;
                 if (existingBookingStatus) {
                     throw new NotAcceptableException("Tutor not available for booking!");
                 } else {
-                    booking.setUserId(userId);
+
+                    booking.setStudentId(userId);
+
+                    booking.setTutorFirstName(tutor.get().getFirstName());
+                    booking.setTutorLastName(tutor.get().getLastName());
+                    booking.setTutorUsername(course.get().getTutorUsername());
+                    booking.setTutorGender(tutor.get().getGender());
+                    booking.setTutorPhone(tutor.get().getPhoneNumber());
+                    booking.setTutorEmail(tutor.get().getEmail());
+                    booking.setTutorPictureId(tutor.get().getProfilePictureId());
+                    booking.setTutorPictureUrl(tutor.get().getProfilePictureUrl());
+
+                    booking.setStudentFirstName(userOptional.get().getFirstName());
+                    booking.setStudentLastName(userOptional.get().getLastName());
+
+                    if (StringUtil.isBlank(bookingRequest.getStudentUsername()))
+                        booking.setStudentUsername(userOptional.get().getUsername());
+
+                    booking.setStudentEmail(userOptional.get().getEmail());
+                    booking.setStudentPhone(userOptional.get().getPhoneNumber());
+                    booking.setStudentGender(tutor.get().getGender());
+                    booking.setStudentPictureId(userOptional.get().getProfilePictureId());
+                    booking.setStudentPictureIUrl(userOptional.get().getProfilePictureUrl());
+
+                    booking.setCourseCode(course.get().getCourseCode());
+                    booking.setCourseTitle(course.get().getCourseTitle());
+                    booking.setCourseDes(course.get().getCourseDes());
+                    booking.setTime(bookingRequest.getTime());
+                    booking.setDate(bookingRequest.getDate());
+                    booking.setPrice(course.get().getPrice());
+                    booking.setLocation(course.get().getLocation());
+
+                    booking.setNoOfStudents(bookingRequest.getNoOfStudents());
+
+                    booking.setType(course.get().getType());
+                    booking.setStartDate(bookingRequest.getStartDate());
+                    booking.setEndDate(bookingRequest.getEndDate());
+                    booking.setStatus(course.get().getStatus());
+
                     booking.setPending(true);
                     booking.setBookingStatus(BookingStatus.BOOKED);
-                    userPhone.get().setBookingStatus(BookingStatus.BOOKED);
+                    tutor.get().setBookingStatus(BookingStatus.BOOKED);
 
                     booking.setTimeCreated(LocalDateTime.now());
                 }
@@ -148,6 +190,9 @@ public class BookingServiceImpl implements BookingService {
 
             if (bookingRequest.getStudentGender() != null)
                 booking.setStudentGender(booking.getStudentGender());
+
+            if (!StringUtil.isBlank(bookingRequest.getOtherStudents()))
+                booking.setOtherStudents(bookingRequest.getOtherStudents());
 
             if (!StringUtil.isBlank(bookingRequest.getCourseCode()))
                 booking.setCourseCode(bookingRequest.getCourseCode());

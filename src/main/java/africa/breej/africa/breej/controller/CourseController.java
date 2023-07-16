@@ -24,7 +24,6 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-
     @PostMapping("")
     public ResponseEntity<Response> createCourse(@CurrentUser UserPrincipal userPrincipal,
                                                  @Validated @RequestBody CourseRequest courseRequest)

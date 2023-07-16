@@ -165,7 +165,7 @@ public class AuthServiceImpl implements AuthService {
         UserResponse userResponse =  getUserResponseFromUser(user);
         updateLastLogin(user);
 
-        String token = passwordEncoder.encode(user.getEmail());
+        String token = passwordEncoder.encode(user.getPhoneNumber());
         return new AuthResponse(token, userResponse);
     }
 

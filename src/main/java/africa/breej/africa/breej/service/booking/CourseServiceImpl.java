@@ -45,6 +45,11 @@ public class CourseServiceImpl implements CourseService {
             if (userOptional.get().getRole() != Role.ROLE_TUTOR) {
                 throw new ResourceNotFoundException("Course", "userId", userId);
             } else {
+                if (StringUtil.isBlank(courseRequest.getTutorUsername()))
+                    course.setTutorUsername(userOptional.get().getUsername());
+
+                course.setTutorFirstName(userOptional.get().getFirstName());
+                course.setTutorLastName(userOptional.get().getLastName());
                 course.setTutorId(userId);
                 course.setTimeCreated(LocalDateTime.now());
             }
@@ -122,8 +127,8 @@ public class CourseServiceImpl implements CourseService {
             if (!StringUtil.isBlank(courseRequest.getLocation()))
                 course.setLocation(courseRequest.getLocation());
 
-            if (!StringUtil.isBlank(courseRequest.getNoOfStudents()))
-                course.setNoOfStudents(courseRequest.getNoOfStudents());
+            if (!StringUtil.isBlank(courseRequest.getMaxStudentsNo()))
+                course.setNoOfStudents(courseRequest.getMaxStudentsNo());
 
             if (!StringUtil.isBlank(courseRequest.getType()))
                 course.setType(courseRequest.getType());
@@ -140,5 +145,11 @@ public class CourseServiceImpl implements CourseService {
             course.setTimeUpdated(LocalDateTime.now());
             return courseRepository.save(course);
         }
+    }
+
+    @Override
+    public Optional<Course> fetchCourseById(String courseId) {
+        Optional<Course> course = courseRepository.findByIdAndDeleted(courseId, false);
+        return course;
     }
 }

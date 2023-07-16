@@ -16,6 +16,8 @@ public class BookingResponse {
 
     private String courseId;
 
+    private String studentId;
+
     private String tutorId;
 
     private String tutorFirstName;
@@ -32,8 +34,6 @@ public class BookingResponse {
     private String tutorPictureId;
 
     private String tutorPictureUrl;
-
-    private String studentId;
 
     private String studentFirstName;
 
@@ -53,6 +53,8 @@ public class BookingResponse {
     private String studentPictureId;
 
     private String studentPictureIUrl;
+
+    private String otherStudents;
 
     private String courseCode;
 

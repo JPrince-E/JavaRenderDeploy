@@ -14,6 +14,8 @@ public class BookingRequest {
 
     private String courseId;
 
+    private String studentId;
+
     private String tutorId;
 
     private String tutorFirstName;
@@ -33,8 +35,6 @@ public class BookingRequest {
 
     private String tutorPictureUrl;
 
-    private String studentId;
-
     private String studentFirstName;
 
     private String studentLastName;
@@ -51,6 +51,8 @@ public class BookingRequest {
     private String studentPictureId;
 
     private String studentPictureIUrl;
+
+    private String otherStudents;
 
     private String courseCode;
 

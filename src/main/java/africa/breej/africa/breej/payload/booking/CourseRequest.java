@@ -35,6 +35,8 @@ public class CourseRequest {
 
     private String noOfStudents;
 
+    private String maxStudentsNo;
+
     private String status;
 
     private String link;

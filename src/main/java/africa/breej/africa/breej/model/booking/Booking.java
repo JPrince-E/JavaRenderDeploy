@@ -16,7 +16,7 @@ public class Booking {
     @Id
     private String id;
 
-    private String userId;
+    private String studentId;
 
     private String courseId;
 
@@ -39,8 +39,6 @@ public class Booking {
 
     private String tutorPictureUrl;
 
-    private String studentId;
-
     private String studentFirstName;
 
     private String studentLastName;
@@ -57,6 +55,8 @@ public class Booking {
     private String studentPictureId;
 
     private String studentPictureIUrl;
+
+    private String otherStudents;
 
     private String courseCode;
 
