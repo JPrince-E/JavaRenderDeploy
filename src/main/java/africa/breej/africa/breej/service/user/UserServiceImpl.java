@@ -6,6 +6,7 @@ import africa.breej.africa.breej.exception.NotFoundException;
 import africa.breej.africa.breej.exception.ResourceNotFoundException;
 import africa.breej.africa.breej.model.auth.UserOverview;
 import africa.breej.africa.breej.model.auth.UserReport;
+import africa.breej.africa.breej.model.booking.BookingStatus;
 import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
 import africa.breej.africa.breej.payload.auth.SignUpRequest;
@@ -20,9 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(users.getPassword()));
 
         return userRepository.save(user);
-}
+    }
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -67,10 +66,44 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<User> fetchUsersByRole(String userId, Role role) {
-        if (role != Role.ROLE_TUTOR){
+        if (role != Role.ROLE_TUTOR) {
             throw new NotFoundException("Tutor not found");
         }
         return userRepository.findAllByRoleAndDeleted(role, false);
+    }
+
+    public List<User> fetchUsersBySpecialty(String userId, String specialty) {
+        if (specialty.isBlank()) {
+            throw new NotFoundException("Tutor not found");
+        }
+        return userRepository.findAllBySpecialtyAndDeleted(specialty, false);
+    }
+
+    public List<User> fetchUsersByBookingStatus(String userId, BookingStatus bookingStatus) {
+        if (bookingStatus == BookingStatus.NOT_AVAILABLE) {
+            throw new NotFoundException("Tutor not available");
+        }
+        return userRepository.findAllByBookingStatusAndDeleted(bookingStatus, false);
+    }
+
+    public List<User> fetchTutorsForBooking(String userId, String hashtag) {
+        List<User> tutors = fetchUsersByRole(userId, Role.ROLE_TUTOR);
+        List<User> status = fetchUsersByBookingStatus(userId, BookingStatus.AVAILABLE);
+
+        if (!tutors.isEmpty() && !status.isEmpty()) {
+
+            List<User> tutor = searchUsersBySpecialty(userId, hashtag);
+            List<User> tutorTag = searchTutorsByHashtag(userId, hashtag);
+            if (!hashtag.isBlank()) {
+
+                if (!tutorTag.isEmpty()) {
+                    return tutorTag;
+                }
+                return tutor;
+            }
+            return status;
+        }
+        throw new NotFoundException("Tutor not found");
     }
 
     @Override
@@ -123,7 +156,7 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(updateUserProfileRequest.getEmail());
             }
 
-            if(updateUserProfileRequest.getGender() != null)
+            if (updateUserProfileRequest.getGender() != null)
                 user.setGender(updateUserProfileRequest.getGender());
 
             if (!StringUtil.isBlank(updateUserProfileRequest.getDepartment()))
@@ -150,16 +183,19 @@ public class UserServiceImpl implements UserService {
             if (!StringUtil.isBlank(updateUserProfileRequest.getSpecialty()))
                 user.setSpecialty(updateUserProfileRequest.getSpecialty());
 
+            if (updateUserProfileRequest.getHashtags() != null)
+                user.setHashtags(updateUserProfileRequest.getHashtags());
+
             if (!StringUtil.isBlank(updateUserProfileRequest.getModeOfIdentification()))
                 user.setModeOfIdentification(updateUserProfileRequest.getModeOfIdentification());
 
             if (!StringUtil.isBlank(updateUserProfileRequest.getStatus()))
                 user.setStatus(updateUserProfileRequest.getStatus());
 
-            if(updateUserProfileRequest.getBookingStatus() != null)
+            if (updateUserProfileRequest.getBookingStatus() != null)
                 user.setBookingStatus(updateUserProfileRequest.getBookingStatus());
 
-            if(updateUserProfileRequest.getOnlineStatus() != null)
+            if (updateUserProfileRequest.getOnlineStatus() != null)
                 user.setOnlineStatus(updateUserProfileRequest.getOnlineStatus());
 
             if (!StringUtil.isBlank(updateUserProfileRequest.getRating()))
@@ -168,7 +204,7 @@ public class UserServiceImpl implements UserService {
             if (!StringUtil.isBlank(updateUserProfileRequest.getAbout()))
                 user.setAbout(updateUserProfileRequest.getAbout());
 
-            if(updateUserProfileRequest.getRole() != null)
+            if (updateUserProfileRequest.getRole() != null)
                 user.setRole(updateUserProfileRequest.getRole());
 
             user.setTimeUpdated(LocalDateTime.now());
@@ -181,7 +217,7 @@ public class UserServiceImpl implements UserService {
 
     public boolean deleteUser(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if(!userOptional.isPresent())
+        if (!userOptional.isPresent())
             throw new NotFoundException("User not found");
         User user = userOptional.get();
         user.setDeleted(true);
@@ -212,9 +248,9 @@ public class UserServiceImpl implements UserService {
 
         UserOverview userOverview = new UserOverview();
 
-        List<UserReport> userReportList = userRepository.userOverviewAggregation(from,to);
+        List<UserReport> userReportList = userRepository.userOverviewAggregation(from, to);
 
-        for(UserReport userReport: userReportList){
+        for (UserReport userReport : userReportList) {
             userOverview.setNumberOfUsers(userReport.getTotalCount());
 
         }
@@ -222,5 +258,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    public List<User> searchTutorsByHashtag(String id, String inputHashtag) {
+        Set<String> allHashtags = new HashSet<>();
+        allHashtags.add(inputHashtag);
+        return userRepository.findByHashtags(inputHashtag, allHashtags);
+    }
 
+    public List<User> searchUsersBySpecialty(String id, String hashtag) {
+        return userRepository.findByHashtagsContaining(hashtag);
+    }
 }

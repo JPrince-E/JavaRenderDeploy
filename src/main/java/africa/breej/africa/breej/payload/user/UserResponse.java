@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -50,6 +52,8 @@ public class UserResponse {
     private String cgpa;
 
     private String specialty;
+
+    private Set<String> hashtags;
 
     private String modeOfIdentification;
 

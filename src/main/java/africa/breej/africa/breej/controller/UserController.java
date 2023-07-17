@@ -5,6 +5,7 @@ import africa.breej.africa.breej.exception.NotAcceptableException;
 import africa.breej.africa.breej.exception.NotFoundException;
 import africa.breej.africa.breej.model.auth.AuthProvider;
 import africa.breej.africa.breej.model.auth.UserOverview;
+import africa.breej.africa.breej.model.booking.BookingStatus;
 import africa.breej.africa.breej.model.user.Gender;
 import africa.breej.africa.breej.model.user.Role;
 import africa.breej.africa.breej.model.user.User;
@@ -59,6 +60,24 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/tutors/{specialty}")
+    public ResponseEntity<List<User>> getTutorsBySpecialty(@CurrentUser UserPrincipal userPrincipal,
+                                                   @PathVariable(value = "specialty") final String specialty,
+                                                   @RequestParam(value = "page", defaultValue = "0") final int page,
+                                                   @RequestParam(value = "limit", defaultValue = "50") final int limit) {
+        List<User> users = userService.fetchUsersBySpecialty(userPrincipal.getId(), specialty);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/tutors/{bookingStatus}")
+    public ResponseEntity<List<User>> getTutorsByBookingStatus(@CurrentUser UserPrincipal userPrincipal,
+                                                           @PathVariable(value = "bookingStatus") final BookingStatus bookingStatus,
+                                                           @RequestParam(value = "page", defaultValue = "0") final int page,
+                                                           @RequestParam(value = "limit", defaultValue = "50") final int limit) {
+        List<User> users = userService.fetchUsersByBookingStatus(userPrincipal.getId(), bookingStatus);
+        return ResponseEntity.ok(users);
+    }
+
     @PutMapping("/update-password")
     public ResponseEntity<Response> updateUserPin(@CurrentUser UserPrincipal userPrincipal, @Validated @RequestBody UpdateUserPasswordRequest updateUserPasswordRequest)
             throws NotAcceptableException, ConflictException, NotFoundException {
@@ -86,6 +105,24 @@ public class UserController {
         UserOverview userOverview = userService.fetchTotalUsers(id,from,to);
         Response response = new Response(true, true, "Gotten User successfully", userOverview);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/search/hashtag")
+    public List<User> searchTutorsByHashtag(@CurrentUser UserPrincipal userPrincipal,
+            @RequestParam("hashtag") String hashtag) {
+        return userService.searchTutorsByHashtag(userPrincipal.getId(), hashtag);
+    }
+
+    @GetMapping("/search/specialty")
+    public List<User> searchCoursesByHashtag(@CurrentUser UserPrincipal userPrincipal,
+            @RequestParam("hashtag") String hashtag) {
+        return userService.searchUsersBySpecialty(userPrincipal.getId(), hashtag);
+    }
+
+    @GetMapping("/search")
+    public List<User> searchCoursesForBooking(@CurrentUser UserPrincipal userPrincipal,
+            @RequestParam("hashtag") String hashtag) {
+        return userService.fetchTutorsForBooking(userPrincipal.getId(), hashtag);
     }
 
     @GetMapping("/filters")

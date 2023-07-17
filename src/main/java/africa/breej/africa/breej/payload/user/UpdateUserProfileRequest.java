@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,6 +44,8 @@ public class UpdateUserProfileRequest {
     private String cgpa;
 
     private String specialty;
+
+    private Set<String> hashtags;
 
     private String modeOfIdentification;
 

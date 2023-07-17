@@ -94,8 +94,6 @@ public class BookingServiceImpl implements BookingService {
                     booking.setStatus(course.get().getStatus());
 
                     booking.setPending(true);
-                    booking.setBookingStatus(BookingStatus.BOOKED);
-                    tutor.get().setBookingStatus(BookingStatus.BOOKED);
 
                     booking.setTimeCreated(LocalDateTime.now());
                 }

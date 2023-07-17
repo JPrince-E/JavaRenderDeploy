@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -59,6 +60,8 @@ public class User {
     private String cgpa;
 
     private String specialty;
+
+    private Set<String> hashtags;
 
     private String modeOfIdentification;
 
